@@ -9,6 +9,7 @@ module Style_sheet = struct
   let t : t Js.t Js.constr Js.Optdef.t = Js.Unsafe.global##._CSSStyleSheet
 
   let append : t Js.t -> unit =
+    let f =
     Js.Unsafe.pure_js_expr
       {js|
   (function (style_sheet) {
@@ -17,6 +18,8 @@ module Style_sheet = struct
       Array.prototype.concat.apply(document.adoptedStyleSheets, [style_sheet]);
   })
 |js}
+    in
+    fun style_sheet -> Js.Unsafe.fun_call f [|Js.Unsafe.inject style_sheet|]
   ;;
 end
 
